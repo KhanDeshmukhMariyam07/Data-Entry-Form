@@ -1,0 +1,132 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #0056b3;
+}
+
+.form-container {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+label {
+    display: inline-block;
+    width: 120px;
+    font-weight: bold;
+}
+
+select, input[type="text"] {
+    width: calc(100% - 130px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+select {
+    color: #999;
+}
+
+select option[value=""] {
+    display: none;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+#revenue label {
+    display: block;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0056b3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #004494;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+@media (max-width: 600px) {
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    select, input[type="text"] {
+        width: 100%;
+    }
+}
+
+.add-teacher-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.add-teacher-group label {
+    width: auto;
+}
+
+.add-teacher-group input[type="text"] {
+    flex: 1;
+}
+
+.btn-add-teacher {
+    background-color: #28a745;
+}
+
+.btn-add-teacher:hover {
+    background-color: #218838;
+}

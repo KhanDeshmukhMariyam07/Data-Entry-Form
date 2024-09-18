@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Example</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Data Entry Form</h1>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="co">CO:</label>
+                <select id="co">
+                    <option value="" disabled selected>Select CO</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+                <label for="bl">BL:</label>
+                <select id="bl">
+                    <option value="" disabled selected>Select BL</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="revenue">Revenue:</label>
+                <div id="revenue">
+                    <label><input type="checkbox" value="ABC"> ABC</label>
+                    <label><input type="checkbox" value="XYZ"> XYZ</label>
+                    <label><input type="checkbox" value="EFG"> EFG</label>
+                    <label><input type="checkbox" value="LMN"> LMN</label>
+                </div>
+            </div>
+            <div class="form-group add-teacher-group">
+                <label for="new-teacher">Add New Teacher:</label>
+                <input type="text" id="new-teacher" placeholder="Enter teacher's name">
+                <button class="btn btn-add-teacher" onclick="addTeacher()">Add Teacher</button>
+            </div>
+            <button class="btn" onclick="addRow()">Add</button>
+        </div>
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>CO</th>
+                    <th>Name</th>
+                    <th>BL</th>
+                    <th>Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function addRow() {
+            const co = document.getElementById('co').value;
+            const name = document.getElementById('name').value;
+            const bl = document.getElementById('bl').value;
+            const revenueCheckboxes = document.querySelectorAll('#revenue input[type="checkbox"]');
+            const revenue = Array.from(revenueCheckboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value)
+                .join(', ');
+
+            const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+
+            cell1.textContent = co;
+            cell2.textContent = name;
+            cell3.textContent = bl;
+            cell4.textContent = revenue;
+
+            const data = {
+                co: co,
+                name: name,
+                bl: bl,
+                revenue: revenue
+            };
+
+            fetch('/add_entry', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+
+            document.getElementById('co').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('bl').value = '';
+            revenueCheckboxes.forEach(checkbox => checkbox.checked = false);
+        }
+
+        function addTeacher() {
+            const newTeacherInput = document.getElementById('new-teacher');
+            const newTeacherName = newTeacherInput.value.trim();
+
+            if (newTeacherName) {
+                const revenueContainer = document.getElementById('revenue');
+                const existingLabels = revenueContainer.querySelectorAll('label');
+
+                const teacherExists = Array.from(existingLabels).some(label => label.textContent.includes(newTeacherName));
+
+                if (!teacherExists) {
+                    const newLabel = document.createElement('label');
+                    const newCheckbox = document.createElement('input');
+                    newCheckbox.type = 'checkbox';
+                    newCheckbox.value = newTeacherName;
+                    newLabel.appendChild(newCheckbox);
+                    newLabel.appendChild(document.createTextNode(' ' + newTeacherName));
+                    revenueContainer.appendChild(newLabel);
+                    newTeacherInput.value = '';
+                } else {
+                    alert('Teacher already exists in the list.');
+                }
+            } else {
+                alert('Please enter a teacher\'s name.');
+            }
+
+        }
+        const form = document.getElementById('add-teacher-form');
+        const btn = document.getElementById('add-teacher-btn');
+
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            fetch('/add_teacher', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name })
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+        });
+    </script>
+</body>
+
+</html>
